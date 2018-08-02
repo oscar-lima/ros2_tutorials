@@ -7,8 +7,8 @@
  * 
  */
 
-#ifndef CHATTER_TALKER_H
-#define CHATTER_TALKER_H
+#ifndef ROS2_TUTORIALS_TALKER_H
+#define ROS2_TUTORIALS_TALKER_H
 
 #include <chrono>
 #include <rclcpp/rclcpp.hpp>
@@ -22,7 +22,7 @@ class TalkerNode : public rclcpp::Node
     // constructor
     TalkerNode();
 
-    // descructor
+    // destructor
     ~TalkerNode();
 
     // get node params
@@ -51,4 +51,4 @@ class TalkerNode : public rclcpp::Node
     double node_frequency_;
 };
 
-#endif  // CHATTER_TALKER_H
+#endif  // ROS2_TUTORIALS_TALKER_H

@@ -15,4 +15,14 @@ include_directories(
 add_executable(talker ros/src/talker.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
 
+add_executable(listener ros/src/listener.cpp)
+ament_target_dependencies(listener rclcpp std_msgs)
+
+install(
+  TARGETS talker listener
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_package()

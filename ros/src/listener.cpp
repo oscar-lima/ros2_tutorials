@@ -3,19 +3,19 @@
  *
  * Author: Oscar Lima (olima@isr.tecnico.ulisboa.pt)
  * 
- * ROS 2 chatter tutorial (only talker is coded here)
+ * ROS 2 chatter tutorial (only listener is coded here)
  * 
  */
 
-#include <ros2_tutorials/talker.h>
+#include <ros2_tutorials/listener.h>
 
-TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(0.0)
+ListenerNode::ListenerNode(): Node("listener"), node_frequency_(0.0), is_chatter_msg_received_(false)
 {
     RCLCPP_INFO(this->get_logger(), "Initializing node...");
-    
-    // create publisher
-    chatter_pub_ = this->create_publisher<std_msgs::msg::String>("chatter");
 
+    // setup subscriber
+    chatter_sub_ = this->create_subscription<std_msgs::msg::String>("chatter", std::bind(&ListenerNode::chatterCallBack, this, _1));
+    
     // init parameter handler
     parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
     
@@ -25,12 +25,12 @@ TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(0.0)
     RCLCPP_INFO(this->get_logger(), "Node initialized...");
 }
 
-TalkerNode::~TalkerNode()
+ListenerNode::~ListenerNode()
 {
     rclcpp::shutdown();
 }
 
-void TalkerNode::get_params()
+void ListenerNode::get_params()
 {
     // log to console
     RCLCPP_INFO(this->get_logger(), "Getting params");
@@ -42,7 +42,7 @@ void TalkerNode::get_params()
         RCLCPP_INFO(this->get_logger(), "Parameter not available, setting default...")
 
         // set default value for parameter
-        node_frequency_ = 2.0;
+        node_frequency_ = 10.0;
     }
     else
     {
@@ -67,31 +67,21 @@ void TalkerNode::get_params()
     RCLCPP_INFO(this->get_logger(), "Node will run at : %lf [hz]", node_frequency_);
 }
 
-void TalkerNode::update()
+void ListenerNode::chatterCallBack(const std_msgs::msg::String::SharedPtr msg)
 {
-    // create std_msgs string custom ROS2 msg
-    std_msgs::msg::String msg;
-    
-    // fill msg
-    msg.data = std::to_string(count_++);
-
-    // publish msg
-    RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", msg.data.c_str());
-    chatter_pub_->publish(msg);
+    chat_msg_ = msg;
+    is_chatter_msg_received_ = true;
 }
 
-void TalkerNode::start_node()
+void ListenerNode::update()
 {
-    // define the rate at which node will run
-    rclcpp::Rate loop_rate(node_frequency_);
-
-    while (rclcpp::ok())
+    if (is_chatter_msg_received_)
     {
-        // main loop function
-        update();
+        // lower flag
+        is_chatter_msg_received_ = false;
 
-        // sleep to control the node frequency
-        loop_rate.sleep();
+        // display msg content
+        RCLCPP_INFO(this->get_logger(), "I heard: '%s'", chat_msg_->data.c_str());
     }
 }
 
@@ -100,11 +90,30 @@ int main(int argc, char **argv)
     // init node
     rclcpp::init(argc, argv);
 
-    // create object of the node class (TalkerNode)
-    TalkerNode talker_node;
+    // declare empty executor
+    rclcpp::executors::SingleThreadedExecutor executor;
 
-    // start node !
-    talker_node.start_node();
+    // create object of ListenerNode class as shared pointer
+    std::shared_ptr<ListenerNode> listener_node = std::make_shared<ListenerNode>();
 
+    // add node to executor
+    executor.add_node(listener_node);
+
+    // set the rate at which node will run
+    rclcpp::Rate loop_rate(listener_node->node_frequency_);
+
+    while (rclcpp::ok())
+    {
+        // listen to callbacks
+        executor.spin_once(1ms);
+
+        // main loop function
+        listener_node->update();
+
+        // sleep to control the node frequency
+        loop_rate.sleep();
+    }
+
+    rclcpp::shutdown();
     return 0;
 }
