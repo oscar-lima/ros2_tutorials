@@ -41,9 +41,6 @@ class TalkerNode : public rclcpp::Node
     // to query from param server
     rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
 
-    // to store node parameters
-    std::shared_future<std::vector<rclcpp::parameter::ParameterVariant> > parameters_;
-
     // example where an integer get incremented and published
     int count_;
 

@@ -52,9 +52,6 @@ class ListenerNode : public rclcpp::Node
     // to query from param server
     rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
 
-    // to store node parameters
-    std::shared_future<std::vector<rclcpp::parameter::ParameterVariant> > parameters_;
-
     // to store the incoming msg from callback
     std_msgs::msg::String::SharedPtr chat_msg_;
 

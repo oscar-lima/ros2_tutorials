@@ -57,7 +57,7 @@ void ListenerNode::get_params()
         {
             if (parameter.get_name() == "node_frequency")
             {
-                node_frequency_ = parameter.get_parameter_value().double_value;
+		node_frequency_ = parameter.as_double();
             }
         }
 
