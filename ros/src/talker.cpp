@@ -13,8 +13,8 @@ TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(10.0)
 {
     RCLCPP_INFO(this->get_logger(), "Initializing node...");
     
-    // create publisher
-    chatter_pub_ = this->create_publisher<std_msgs::msg::String>("chatter", 10.0);
+    // create publisher with quality of service 10
+    chatter_pub_ = this->create_publisher<std_msgs::msg::String>("chatter", 10);
 
     // init parameter handler
     parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);

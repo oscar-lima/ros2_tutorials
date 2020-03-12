@@ -5,7 +5,8 @@ from time import sleep
 import rclpy
 from std_msgs.msg import String
 
-class TalkerNode(object):
+# NOTE: no rclpy.node.Node inheritance
+class TalkerNode:
     def __init__(self):
         '''
         publisher example in ROS2
@@ -13,8 +14,9 @@ class TalkerNode(object):
         '''
         # init node
         self.node = rclpy.create_node('talker')
-        self.publisher = self.node.create_publisher(String, 'chatter')
-        
+        self.publisher = self.node.create_publisher(String, 'chatter', 10)
+        self.node.get_logger().info('Talker node initialized...')
+
 
     def start_talker(self):
         '''

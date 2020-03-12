@@ -12,9 +12,9 @@ ListenerNode::ListenerNode(): Node("listener"), node_frequency_(10.0), is_chatte
 {
     RCLCPP_INFO(this->get_logger(), "Initializing node...");
 
-    // setup subscriber
+    // setup subscriber with quality of service 10
     chatter_sub_ = this->create_subscription<std_msgs::msg::String>(
-        "chatter", 10.0, std::bind(&ListenerNode::chatterCallBack, this, _1));
+        "chatter", 10, std::bind(&ListenerNode::chatterCallBack, this, _1));
     
     // init parameter handler
     parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);

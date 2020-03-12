@@ -13,7 +13,8 @@ class ListenerNode(Node):
         # set node name
         super().__init__('listener')
         # setup subscriber
-        self.subscription = self.create_subscription(String, 'chatter', self.listenerCallBack)
+        self.subscription = self.create_subscription(String, 'chatter', self.listenerCallBack, 10)
+        self.get_logger().info('Listener node initialized...')
 
 
     def listenerCallBack(self, msg):
