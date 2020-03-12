@@ -1,7 +1,7 @@
 /*
- * Copyright [2018] <Instituto Superior Tecnico>
+ * Copyright [2020] <GPLv3>
  *
- * Author: Oscar Lima (olima@isr.tecnico.ulisboa.pt)
+ * Author: Oscar Lima (oscar.lima@dfki.de)
  * 
  * ROS 2 chatter tutorial (only talker is covered here)
  * 

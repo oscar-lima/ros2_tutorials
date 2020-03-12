@@ -1,26 +1,26 @@
 /*
- * Copyright [2018] <Instituto Superior Tecnico>
+ * Copyright [2020] <GPLv3>
  *
- * Author: Oscar Lima (olima@isr.tecnico.ulisboa.pt)
+ * Author: Oscar Lima (oscar.lima@dfki.de)
  * 
- * ROS 2 chatter tutorial (only listener is coded here)
+ * ROS 2 chatter tutorial (only talker is covered here)
  * 
  */
-
 #include <ros2_tutorials/listener.h>
 
-ListenerNode::ListenerNode(): Node("listener"), node_frequency_(0.0), is_chatter_msg_received_(false)
+ListenerNode::ListenerNode(): Node("listener"), node_frequency_(10.0), is_chatter_msg_received_(false)
 {
     RCLCPP_INFO(this->get_logger(), "Initializing node...");
 
     // setup subscriber
-    chatter_sub_ = this->create_subscription<std_msgs::msg::String>("chatter", std::bind(&ListenerNode::chatterCallBack, this, _1));
+    chatter_sub_ = this->create_subscription<std_msgs::msg::String>(
+        "chatter", 10.0, std::bind(&ListenerNode::chatterCallBack, this, _1));
     
     // init parameter handler
     parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
     
     // get node params and store in member variables
-    get_params();
+    // get_params();
 
     RCLCPP_INFO(this->get_logger(), "Node initialized...");
 }
@@ -39,7 +39,7 @@ void ListenerNode::get_params()
     if (!parameters_client_->wait_for_service(1s))
     {
         // parameter not available, set default value
-        RCLCPP_INFO(this->get_logger(), "Parameter not available, setting default...")
+        RCLCPP_INFO(this->get_logger(), "Parameter not available, setting default...");
 
         // set default value for parameter
         node_frequency_ = 10.0;
@@ -61,7 +61,7 @@ void ListenerNode::get_params()
             }
         }
 
-        RCLCPP_INFO(this->get_logger(), ss.str().c_str())
+        RCLCPP_INFO(this->get_logger(), ss.str().c_str());
     }
     
     RCLCPP_INFO(this->get_logger(), "Node will run at : %lf [hz]", node_frequency_);
