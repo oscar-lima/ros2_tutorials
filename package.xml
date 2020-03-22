@@ -3,14 +3,14 @@
     <name>ros2_tutorials</name>
     <version>0.0.1</version>
     <description>
-        ros2 tutorials: talker
+        ros2 tutorials (c++ and python3): talker, listener
     </description>
-    
-    <maintainer email="olima@isr.tecnico.ulisboa.pt">Oscar Lima</maintainer>
+
+    <maintainer email="oscar.lima@dfki.de">Oscar Lima</maintainer>
 
     <license>GPLv3</license>
 
-    <author email="olima@isr.tecnico.ulisboa.pt">Oscar Lima</author>
+    <author email="oscar.lima@dfki.de">Oscar Lima</author>
 
     <buildtool_depend>ament_cmake</buildtool_depend>
 
