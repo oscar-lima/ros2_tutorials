@@ -39,7 +39,7 @@ class TalkerNode : public rclcpp::Node
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr chatter_pub_;
 
     // to query from param server
-    rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
+    rclcpp::SyncParametersClient::SharedPtr parameters_client_;
 
     // example where an integer get incremented and published
     int count_;

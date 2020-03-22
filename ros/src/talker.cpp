@@ -2,25 +2,25 @@
  * Copyright [2020] <GPLv3>
  *
  * Author: Oscar Lima (oscar.lima@dfki.de)
- * 
+ *
  * ROS 2 chatter tutorial (only talker is covered here)
- * 
+ *
  */
 
 #include <ros2_tutorials/talker.h>
 
-TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(10.0)
+TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(15.0)
 {
     RCLCPP_INFO(this->get_logger(), "Initializing node...");
-    
+
     // create publisher with quality of service 10
     chatter_pub_ = this->create_publisher<std_msgs::msg::String>("chatter", 10);
 
     // init parameter handler
-    parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
-    
+    parameters_client_ = std::make_shared<rclcpp::SyncParametersClient>(this);
+
     // get node params and store in member variables
-    // get_params();
+    get_params();
 
     RCLCPP_INFO(this->get_logger(), "Node initialized...");
 }
@@ -34,36 +34,27 @@ void TalkerNode::get_params()
 {
     // log to console
     RCLCPP_INFO(this->get_logger(), "Getting params");
-    
-    // waiting for parameter service to become available
+
     if (!parameters_client_->wait_for_service(1s))
     {
-        // parameter not available, set default value
-        RCLCPP_INFO(this->get_logger(), "Parameter not available, setting default...");
-
-        // set default value for parameter
-        node_frequency_ = 2.0;
+        if (!rclcpp::ok())
+        {
+            RCLCPP_WARN(this->get_logger(), "Parameter service not available, setting default params");
+            node_frequency_ = 10.0;
+        }
     }
     else
     {
-        // parameter available, reading it
-        RCLCPP_INFO(this->get_logger(), "Parameter available, setting from server");
-    
-        // get params
-        auto parameters = parameters_client_->get_parameters({"node_frequency"});
+        RCLCPP_INFO(this->get_logger(), "Parameter service available");
 
-        std::stringstream ss;
-        for (auto & parameter : parameters.get())
-        {
-            if (parameter.get_name() == "node_frequency")
-            {
-		node_frequency_ = parameter.as_double();
-            }
-        }
+        // example: check parameter existance
+        if(!parameters_client_->has_parameter("node_frequency"))
+            RCLCPP_WARN(this->get_logger(), "Parameter node_frequency not found, setting default value");
 
-        RCLCPP_INFO(this->get_logger(), ss.str().c_str());
+        // get parameter, if not available set default value
+        node_frequency_ = parameters_client_->get_parameter<double>("node_frequency", 5.0);
     }
-    
+
     RCLCPP_INFO(this->get_logger(), "Node will run at : %lf [hz]", node_frequency_);
 }
 
@@ -71,7 +62,7 @@ void TalkerNode::update()
 {
     // create std_msgs string custom ROS2 msg
     std_msgs::msg::String msg;
-    
+
     // fill msg
     msg.data = std::to_string(count_++);
 
@@ -92,6 +83,13 @@ void TalkerNode::start_node()
 
         // sleep to control the node frequency
         loop_rate.sleep();
+
+        // alternative to ROS1 ros::spinOnce()
+        // you might wonder, why spin when this node has no callbacks (does not subscribe to anything)
+        // well turns out parameters need this, if you do "ros2 param list" without spinning, it will hang
+        // another option when you do not need to constantly publish stuff (like this node does), do a normal spin
+        // rclcpp::spin(this->get_node_base_interface());
+        rclcpp::spin_some(this->get_node_base_interface());
     }
 }
 

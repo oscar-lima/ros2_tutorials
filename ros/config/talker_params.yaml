@@ -1,0 +1,4 @@
+# node name
+talker:
+    ros__parameters:
+        node_frequency: 7.0
