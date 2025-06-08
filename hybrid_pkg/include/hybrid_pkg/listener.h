@@ -1,14 +1,5 @@
-/*
- * Copyright [2020] <GPLv3>
- *
- * Author: Oscar Lima (oscar.lima@dfki.de)
- * 
- * ROS 2 chatter tutorial (only talker is covered here)
- * 
- */
-
-#ifndef ROS2_TUTORIALS_LISTENER_H
-#define ROS2_TUTORIALS_LISTENER_H
+#ifndef HYBRID_PKG_LISTENER_H
+#define HYBRID_PKG_LISTENER_H
 
 #include <chrono>
 #include <rclcpp/rclcpp.hpp>
@@ -59,4 +50,4 @@ class ListenerNode : public rclcpp::Node
     bool is_chatter_msg_received_;
 };
 
-#endif  // ROS2_TUTORIALS_LISTENER_H
+#endif  // HYBRID_PKG_LISTENER_H

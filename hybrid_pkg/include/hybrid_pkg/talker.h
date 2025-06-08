@@ -1,14 +1,5 @@
-/*
- * Copyright [2020] <GPLv3>
- *
- * Author: Oscar Lima (oscar.lima@dfki.de)
- * 
- * ROS 2 chatter tutorial (only talker is covered here)
- * 
- */
-
-#ifndef ROS2_TUTORIALS_TALKER_H
-#define ROS2_TUTORIALS_TALKER_H
+#ifndef HYBRID_PKG_TALKER_H
+#define HYBRID_PKG_TALKER_H
 
 #include <chrono>
 #include <rclcpp/rclcpp.hpp>
@@ -48,4 +39,4 @@ class TalkerNode : public rclcpp::Node
     double node_frequency_;
 };
 
-#endif  // ROS2_TUTORIALS_TALKER_H
+#endif  // HYBRID_PKG_TALKER_H

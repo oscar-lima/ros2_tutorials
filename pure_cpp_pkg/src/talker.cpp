@@ -1,13 +1,4 @@
-/*
- * Copyright [2020] <GPLv3>
- *
- * Author: Oscar Lima (oscar.lima@dfki.de)
- *
- * ROS 2 chatter tutorial (only talker is covered here)
- *
- */
-
-#include <ros2_tutorials/talker.h>
+#include <pure_cpp_pkg/talker.h>
 
 TalkerNode::TalkerNode(): Node("talker"), count_(0), node_frequency_(15.0)
 {

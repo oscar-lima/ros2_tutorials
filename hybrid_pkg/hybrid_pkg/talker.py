@@ -17,7 +17,6 @@ class TalkerNode:
         self.publisher = self.node.create_publisher(String, 'chatter', 10)
         self.node.get_logger().info('Talker node initialized...')
 
-
     def start_talker(self):
         '''
         publish an incremental counter to string topic
@@ -33,13 +32,8 @@ class TalkerNode:
         # Destroy the node explicitly (optional)
         node.destroy_node()
 
-
 def main():
     rclpy.init()
     talker_node = TalkerNode()
     talker_node.start_talker()
     rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()

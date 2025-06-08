@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>no_code_pkg</name>
+    <version>0.0.1</version>
+    <description>
+        Example ROS2 pkg with no code, e.g., for storing launch files.
+    </description>
+    <author email="oscar.lima@dfki.de">Oscar Lima</author>
+    <maintainer email="oscar.lima@dfki.de">Oscar Lima</maintainer>
+    <license>BSD-3-Clause</license>
+
+    <buildtool_depend>ament_cmake</buildtool_depend>
+
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+</package>

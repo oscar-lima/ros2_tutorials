@@ -1,12 +1,4 @@
-/*
- * Copyright [2020] <GPLv3>
- *
- * Author: Oscar Lima (oscar.lima@dfki.de)
- * 
- * ROS 2 chatter tutorial (only talker is covered here)
- * 
- */
-#include <ros2_tutorials/listener.h>
+#include <pure_cpp_pkg/listener.h>
 
 ListenerNode::ListenerNode(): Node("listener"), node_frequency_(10.0), is_chatter_msg_received_(false)
 {
@@ -15,10 +7,10 @@ ListenerNode::ListenerNode(): Node("listener"), node_frequency_(10.0), is_chatte
     // setup subscriber with quality of service 10
     chatter_sub_ = this->create_subscription<std_msgs::msg::String>(
         "chatter", 10, std::bind(&ListenerNode::chatterCallBack, this, _1));
-    
+
     // init parameter handler
     parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
-    
+
     // get node params and store in member variables
     // get_params();
 
@@ -34,7 +26,7 @@ void ListenerNode::get_params()
 {
     // log to console
     RCLCPP_INFO(this->get_logger(), "Getting params");
-    
+
     // waiting for parameter service to become available
     if (!parameters_client_->wait_for_service(1s))
     {
@@ -48,7 +40,7 @@ void ListenerNode::get_params()
     {
         // parameter available, reading it
         RCLCPP_INFO(this->get_logger(), "Parameter available, setting from server");
-    
+
         // get params
         auto parameters = parameters_client_->get_parameters({"node_frequency"});
 
@@ -63,7 +55,7 @@ void ListenerNode::get_params()
 
         RCLCPP_INFO(this->get_logger(), ss.str().c_str());
     }
-    
+
     RCLCPP_INFO(this->get_logger(), "Node will run at : %lf [hz]", node_frequency_);
 }
 

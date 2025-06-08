@@ -16,11 +16,9 @@ class ListenerNode(Node):
         self.subscription = self.create_subscription(String, 'chatter', self.listenerCallBack, 10)
         self.get_logger().info('Listener node initialized...')
 
-
     def listenerCallBack(self, msg):
         # print received msg to console
         self.get_logger().info('I heard: "%s"' % msg.data)
-        
 
     def start_listener(self):
         '''
@@ -37,7 +35,3 @@ def main():
     listener_node = ListenerNode()
     listener_node.start_listener()
     rclpy.shutdown()
-
-
-if __name__ == '__main__':
-    main()        
