@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from time import sleep
-
 import rclpy
 from std_msgs.msg import String
 
@@ -13,7 +11,12 @@ class TalkerNode:
         constructor
         '''
         # init node
-        self.node = rclpy.create_node('talker')
+        self.node = rclpy.create_node('talker_py')
+        # declare parameter with default value
+        self.node.declare_parameter('node_frequency', 1.0)
+        self.freq = self.node.get_parameter(
+            'node_frequency').get_parameter_value().double_value
+        self.node.get_logger().info(f'Node frequency set to: {self.freq} Hz')
         self.publisher = self.node.create_publisher(String, 'chatter', 10)
         self.node.get_logger().info('Talker node initialized...')
 
@@ -23,14 +26,16 @@ class TalkerNode:
         '''
         msg = String()
         i = 0
+        rate = self.node.create_rate(self.freq)
         while rclpy.ok():
             msg.data = 'Hello World: %d' % i
             i += 1
             self.node.get_logger().info('Publishing: "%s"' % msg.data)
             self.publisher.publish(msg)
-            sleep(0.5)  # seconds
+            rclpy.spin_once(self.node)
+            rate.sleep() # only works if you spin once
         # Destroy the node explicitly (optional)
-        node.destroy_node()
+        self.node.destroy_node()
 
 def main():
     rclpy.init()

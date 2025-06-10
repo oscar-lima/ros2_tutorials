@@ -1,4 +1,4 @@
 # node name
-talker:
+talker_py:
     ros__parameters:
-        node_frequency: 7.0
+        node_frequency: 2.0
