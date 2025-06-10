@@ -13,7 +13,6 @@ def generate_launch_description():
         'config',
         'talker_params.yaml'
     ])
-    # param_file = '/home/oscar/ros_ws/tutorials_ws/install/pure_python_pkg/share/pure_python_pkg/config/talker_params.yaml'
 
     return LaunchDescription([
         Node(
