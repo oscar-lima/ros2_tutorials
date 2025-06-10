@@ -20,18 +20,13 @@ class ListenerNode(Node):
         # print received msg to console
         self.get_logger().info('I heard: "%s"' % msg.data)
 
-    def start_listener(self):
-        '''
-        Subscribe to chatter topic and print in console its content
-        '''
-        # wait for ctrl + c, listen to callbacks at the same time
-        rclpy.spin(self)
-        # Destroy the node explicitly (optional)
-        node.destroy_node()
-
-
-def main():
-    rclpy.init()
+def main(args=None):
+    rclpy.init(args=args)
     listener_node = ListenerNode()
-    listener_node.start_listener()
+    rclpy.spin(listener_node)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    #             when the garbage collector destroys the node object)
+    listener_node.destroy_node()
     rclpy.shutdown()
